@@ -1,31 +1,50 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>J.A.R.V.I.S</title>
-<link rel="stylesheet" href="style.css">
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>J.A.R.V.I.S. — Mobile Edition</title>
+ <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header><h1>J.A.R.V.I.S</h1><p>MOBILE EDITION</p></header>
-<div class="core">
-<div class="ring r1"></div>
-<div class="ring r2"></div>
-<div class="center"></div>
-</div>
-<p class="core-text">CORE ACTIVE</p>
-<div class="status">
-<h2>SYSTEM STATUS</h2>
-<div class="row"><span>AI CORE</span><b class="on">● ONLINE</b></div>
-<div class="row"><span>NETWORK</span><b class="on">● ONLINE</b></div>
-<div class="row"><span>VOICE</span><b class="off">○ LOCKED</b></div>
-<div class="row"><span>MEMORY</span><b class="off">○ LOCKED</b></div>
-</div>
-<div class="chat" id="chat"></div>
-<div class="input-area">
-<input id="msg" placeholder="Ask J.A.R.V.I.S...">
-<button id="send">SEND</button>
-</div>
-<script src="script.js"></script>
+ <main class="interface">
+ <header class="brand">
+ <p class="eyebrow">STARK INDUSTRIES • PERSONAL ASSISTANT</p>
+ <h1>J.A.R.V.I.S.</h1>
+ <p class="subtitle">MOBILE EDITION <span> / CORE INTERFACE</span></p>
+ </header>
+ <section class="core-section" aria-label="JARVIS core">
+ <div class="core-ring" id="coreRing" aria-hidden="true">
+ <div class="ring ring-outer"></div>
+ <div class="ring ring-mid"></div>
+ <div class="ring ring-inner"></div>
+ <div class="tick-ring"></div>
+ <div class="arc arc-cyan"></div>
+ <div class="arc arc-gold"></div>
+ <div class="core-center"><span>J</span></div>
+ </div>
+ <p class="core-label"><span class="pulse-dot"></span> CORE <strong id="coreState">STANDBY</strong></p>
+ </section>
+ <section class="status-panel">
+ <h2>SYSTEM STATUS</h2>
+ <div class="status-row"><span>AI CORE</span><b class="status-value" id="aiStatus">● READY</b></div>
+ <div class="status-row"><span>NETWORK</span><b class="status-value" id="networkStatus">● LOCAL UI</b></div>
+ <div class="status-row"><span>VOICE</span><b class="status-value warning" id="voiceStatus">● LOCKED</b></div>
+ <div class="status-row"><span>MEMORY</span><b class="status-value warning" id="memoryStatus">● LOCKED</b></div>
+ </section>
+ <section class="console">
+ <div class="console-heading"><span>COMMUNICATION CONSOLE</span><span id="clock">--:--:--</span></div>
+ <div class="chat" id="chat" role="log" aria-live="polite">
+ <p class="msg system-msg"><span>J.A.R.V.I.S.</span> Interface online. Awaiting connection to the AI backend.</p>
+ </div>
+ <form id="chatForm" class="input-row">
+ <input id="messageInput" type="text" maxlength="4000" placeholder="Ask J.A.R.V.I.S..." autocomplete="off" required>
+ <button type="submit" id="sendButton">SEND <span>■</span></button>
+ </form>
+ <p class="footnote" id="connectionNote">VISUAL CORE ACTIVE • AI BACKEND NOT CONNECTED</p>
+ </section>
+ <footer>J.A.R.V.I.S. PERSONAL PROJECT <span>•</span> MOBILE UI BUILD</footer>
+ </main>
+ <script src="script.js"></script>
 </body>
 </html>
