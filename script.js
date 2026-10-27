@@ -5,7 +5,7 @@
  * Later, after the private backend is deployed, set API_BASE_URL to its HTTPS base URL
  * and implement your authenticated backend request. Never put a Gemini API key here.
  */
-const API_BASE_URL = ""; // Example: "https://your-service.example.com" — leave blank for UI demo.
+const API_BASE_URL = "const API_BASE_URL = "https://jarvis-core-js4s.onrender.com"; // Example: "https://your-service.example.com" — leave blank for UI demo.
 const form = document.getElementById("chatForm");
 const input = document.getElementById("messageInput");
 const sendButton = document.getElementById("sendButton");
