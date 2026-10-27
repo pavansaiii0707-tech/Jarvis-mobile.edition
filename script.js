@@ -1,6 +1,7 @@
 "use strict";
 
 const API_BASE_URL = "https://jarvis-core-js4s.onrender.com";
+const TOKEN_KEY = "jarvis_login_token";
 
 const form = document.getElementById("chatForm");
 const input = document.getElementById("messageInput");
@@ -13,20 +14,22 @@ const connectionNote = document.getElementById("connectionNote");
 const aiStatus = document.getElementById("aiStatus");
 const networkStatus = document.getElementById("networkStatus");
 
-const SESSION_ID =
-  "jarvis-" + Math.random().toString(36).slice(2) + Date.now();
+const SESSION_ID = "jarvis-" + crypto.randomUUID();
 
 let accessToken = null;
-let loginPromise = null;
+
+try {
+  accessToken = localStorage.getItem(TOKEN_KEY);
+} catch {}
 
 function updateClock() {
-  if (!clock) return;
-
-  clock.textContent = new Date().toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
-  });
+  if (clock) {
+    clock.textContent = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+  }
 }
 
 updateClock();
@@ -57,101 +60,43 @@ function setNetwork(text) {
   if (networkStatus) networkStatus.textContent = text;
 }
 
-async function login() {
-  if (accessToken) return accessToken;
-  if (loginPromise) return loginPromise;
-
-  loginPromise = (async () => {
-    const password = window.prompt(
-      "Enter your JARVIS login password:"
-    );
-
-    if (!password) {
-      throw new Error("Login cancelled. Please try again.");
-    }
-
-    let response;
-
-    try {
-      response = await fetch(`${API_BASE_URL}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ password })
-      });
-    } catch {
-      throw new Error(
-        "Cannot reach JARVIS Core. Check your internet connection."
-      );
-    }
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        throw new Error("Incorrect login password.");
-      }
-
-      throw new Error(
-        data.detail || `Login failed: ${response.status}`
-      );
-    }
-
-    if (!data.access_token) {
-      throw new Error("Login did not return an access token.");
-    }
-
-    accessToken = data.access_token;
-    return accessToken;
-  })();
-
-  try {
-    return await loginPromise;
-  } finally {
-    loginPromise = null;
-  }
-}
-
 async function sendToJarvis(message) {
-  const token = await login();
-
-  let response;
-
-  try {
-    response = await fetch(`${API_BASE_URL}/chat`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        message: message,
-        session_id: SESSION_ID
-      })
-    });
-  } catch {
-    throw new Error(
-      "Cannot connect to JARVIS Core. Check your internet."
-    );
+  if (!accessToken) {
+    throw new Error("Please unlock JARVIS first.");
   }
+
+  const response = await fetch(`${API_BASE_URL}/chat`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`
+    },
+    body: JSON.stringify({
+      message,
+      session_id: SESSION_ID
+    })
+  });
 
   if (response.status === 401) {
     accessToken = null;
-    throw new Error(
-      "Login expired or rejected. Send your message again."
-    );
+
+    try {
+      localStorage.removeItem(TOKEN_KEY);
+    } catch {}
+
+    document.getElementById("jarvisApp").hidden = true;
+    document.getElementById("lockScreen").hidden = false;
+
+    throw new Error("Session expired. Unlock JARVIS again.");
   }
 
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(
-      data.detail || `JARVIS Core error: ${response.status}`
-    );
+    throw new Error(data.detail || `Server error: ${response.status}`);
   }
 
-  if (!data.reply || typeof data.reply !== "string") {
+  if (typeof data.reply !== "string" || !data.reply.trim()) {
     throw new Error("JARVIS returned no reply.");
   }
 
@@ -163,7 +108,6 @@ if (form && input && sendButton) {
     event.preventDefault();
 
     const message = input.value.trim();
-
     if (!message || sendButton.disabled) return;
 
     addMessage("YOU", message, "user-msg");
@@ -180,29 +124,20 @@ if (form && input && sendButton) {
 
     try {
       const reply = await sendToJarvis(message);
-
       addMessage("J.A.R.V.I.S.", reply, "system-msg");
       setStatus("JARVIS CORE CONNECTED");
       setNetwork("ONLINE");
-
       if (aiStatus) aiStatus.textContent = "ONLINE";
     } catch (error) {
-      addMessage(
-        "SYSTEM",
-        error.message || "An unexpected error occurred.",
-        "system-msg"
-      );
-
-      setStatus("BACKEND CONNECTION FAILED");
+      addMessage("SYSTEM", error.message || "Connection failed.", "system-msg");
+      setStatus("CONNECTION FAILED");
       setNetwork("ERROR");
+      if (aiStatus) aiStatus.textContent = "OFFLINE";
     } finally {
       sendButton.disabled = false;
-      sendButton.textContent = "SEND ■";
-
+      sendButton.textContent = "SEND ▪";
       if (coreRing) coreRing.classList.remove("thinking");
       if (coreState) coreState.textContent = "STANDBY";
-
-      input.focus();
     }
   });
-  }
+      }
