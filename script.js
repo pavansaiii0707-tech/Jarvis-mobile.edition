@@ -141,7 +141,8 @@ if (form && input && sendButton) {
 
     try {
       const reply = await sendToJarvis(message);
-      addMessage("J.A.R.V.I.S.", reply, "system-msg");
+addMessage("J.A.R.V.I.S.", reply, "system-msg");
+speakJarvis(reply);
       setStatus("JARVIS CORE CONNECTED");
       setNetwork("ONLINE");
       if (aiStatus) aiStatus.textContent = "ONLINE";
