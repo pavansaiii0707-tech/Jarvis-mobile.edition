@@ -141,3 +141,58 @@ if (form && input && sendButton) {
     }
   });
       }
+const micButton = document.getElementById("micButton");
+
+if (micButton) {
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    micButton.textContent = "❌";
+    micButton.title = "Speech recognition is not supported";
+  } else {
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-IN";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    micButton.addEventListener("click", () => {
+      try {
+        recognition.start();
+        micButton.textContent = "🔴";
+      } catch (error) {
+        console.error("Microphone error:", error);
+      }
+    });
+
+    recognition.onresult = (event) => {
+      const transcript =
+        event.results[0][0].transcript;
+
+      const messageInput =
+        document.querySelector(
+          'input[placeholder="Ask J.A.R.V.I.S..."], textarea[placeholder="Ask J.A.R.V.I.S..."]'
+        );
+
+      if (messageInput) {
+        messageInput.value = transcript;
+        messageInput.dispatchEvent(
+          new Event("input", { bubbles: true })
+        );
+      }
+
+      micButton.textContent = "🎙️";
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech error:", event.error);
+      micButton.textContent = "🎙️";
+    };
+
+    recognition.onend = () => {
+      micButton.textContent = "🎙️";
+    };
+  }
+}
