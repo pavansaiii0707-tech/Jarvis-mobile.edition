@@ -1,3 +1,20 @@
+
+function speakJarvis(text) {
+  if (!("speechSynthesis" in window)) {
+    console.warn("Speech output is not supported.");
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const speech = new SpeechSynthesisUtterance(text);
+  speech.lang = "en-IN";
+  speech.rate = 1;
+  speech.pitch = 0.9;
+
+  window.speechSynthesis.speak(speech);
+}
+
 "use strict";
 
 const API_BASE_URL = "https://jarvis-core-js4s.onrender.com";
