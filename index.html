@@ -1,14 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#080d16">
-  <title>J.A.R.V.I.S. — Mobile Edition</title>
+  <meta name="theme-color" content="#02070d">
+  <title>J.A.R.V.I.S. — Stark Industries</title>
   <link rel="stylesheet" href="style.css">
+
   <style>
-    [hidden] { display: none !important; }
+    [hidden] {
+      display: none !important;
+    }
 
     .lock-screen {
       position: fixed;
@@ -18,7 +20,8 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-      background: radial-gradient(ellipse at center, #10283a 0%, #080d16 65%);
+      background:
+        radial-gradient(ellipse at center, #10283a 0%, #080d16 65%);
     }
 
     .lock-panel {
@@ -36,9 +39,11 @@
       place-items: center;
       border: 2px solid #45dfff;
       border-radius: 50%;
-      box-shadow: 0 0 22px #13cfff55, inset 0 0 22px #13cfff22;
+      box-shadow:
+        0 0 22px #13cfff55,
+        inset 0 0 22px #13cfff22;
       color: #45dfff;
-      font-size: 36px;
+      font-size: 30px;
       letter-spacing: 3px;
     }
 
@@ -104,9 +109,12 @@
 </head>
 
 <body>
+
+  <!-- SECURE ACCESS -->
   <section id="lockScreen" class="lock-screen">
     <div class="lock-panel">
       <div class="lock-emblem" aria-hidden="true">J.A.R</div>
+
       <h1>J.A.R.V.I.S.</h1>
       <p class="lock-caption">PERSONAL ACCESS TERMINAL</p>
 
@@ -118,108 +126,251 @@
           autocomplete="current-password"
           required
         >
-        <button id="unlockButton" type="submit">AUTHENTICATE</button>
+
+        <button id="unlockButton" type="submit">
+          AUTHENTICATE
+        </button>
       </form>
 
       <p id="lockError" class="lock-error" role="status"></p>
-      <p class="lock-caption">SECURE SESSION • AUTHORIZED ACCESS ONLY</p>
+
+      <p class="lock-caption">
+        SECURE SESSION • AUTHORIZED ACCESS ONLY
+      </p>
     </div>
   </section>
 
+  <!-- MAIN JARVIS SYSTEM -->
   <main id="jarvisApp" class="interface" hidden>
-    <div class="top-actions">
-      <button id="lockButton" class="lock-button" type="button">
-        LOCK J.A.R.V.I.S. 🔒
-      </button>
+
+    <!-- TOP HUD -->
+    <div class="hud-topbar">
+
+      <div class="hud-brand">
+        <span class="hud-indicator"></span>
+        STARK INDUSTRIES
+        <span class="hud-divider"> / </span>
+        PERSONAL SYSTEM
+      </div>
+
+      <div class="top-actions">
+        <button
+          id="lockButton"
+          class="lock-button"
+          type="button"
+        >
+          LOCK 🔒
+        </button>
+      </div>
+
     </div>
 
+    <!-- IDENTITY -->
     <header class="brand">
-      <p class="eyebrow">STARK INDUSTRIES • PERSONAL ASSISTANT</p>
+
+      <p class="eyebrow">
+        JUST A RATHER VERY INTELLIGENT SYSTEM
+      </p>
+
       <h1>J.A.R.V.I.S.</h1>
-      <p class="subtitle">MOBILE EDITION <span>/ CORE INTERFACE</span></p>
+
+      <p class="subtitle">
+        STARK INDUSTRIES
+        <span> / PERSONAL AI</span>
+      </p>
+
     </header>
 
+    <!-- CENTRAL ARC REACTOR -->
     <section class="core-section" aria-label="JARVIS core">
-      <div class="core-ring" id="coreRing" aria-hidden="true">
+
+      <div class="hud-coordinate hud-coordinate-left">
+        SYSTEM CORE // 01
+      </div>
+
+      <div
+        class="core-ring"
+        id="coreRing"
+        aria-hidden="true"
+      >
         <div class="ring ring-outer"></div>
         <div class="ring ring-mid"></div>
         <div class="ring ring-inner"></div>
         <div class="ring ring-core"></div>
+
         <div class="arc arc-cyan"></div>
         <div class="arc arc-gold"></div>
-        <div class="core-center"><span>J</span></div>
+
+        <div class="core-center">
+          <span>J</span>
+        </div>
       </div>
+
       <p class="core-label">
         <span class="pulse-dot"></span>
-        CORE <strong id="coreState">STANDBY</strong>
+        <strong id="coreState">STANDBY</strong>
       </p>
+
+      <div class="hud-readouts">
+
+        <div>
+          <span>CORE</span>
+          <b>ACTIVE</b>
+        </div>
+
+        <div>
+          <span>INTERFACE</span>
+          <b>MK-VII</b>
+        </div>
+
+        <div>
+          <span>SECURITY</span>
+          <b>ENABLED</b>
+        </div>
+
+      </div>
+
     </section>
 
-    <section class="status-panel">
-      <h2>SYSTEM STATUS</h2>
-      <div class="status-row">
-        <span>AI SYSTEM</span>
-        <b class="status-value" id="aiStatus">READY</b>
-      </div>
-      <div class="status-row">
-        <span>NETWORK</span>
-        <b class="status-value" id="networkStatus">LOCAL UI</b>
-      </div>
-      <div class="status-row">
-        <span>VOICE</span>
-        <b class="status-value" id="voiceStatus">STANDBY</b>
-      </div>
-      <div class="status-row">
-        <span>MEMORY</span>
-        <b class="status-value warning" id="memoryStatus">SESSION ONLY</b>
-      </div>
-    </section>
+    <!-- SYSTEM INFORMATION -->
+    <div class="hud-panels">
 
-    <section class="console">
-      <div class="console-heading">
-        <span>COMMUNICATION CONSOLE</span>
-        <span id="clock">--:--:--</span>
-      </div>
+      <section class="status-panel">
 
-      <div id="chat" class="chat" role="log" aria-live="polite">
-        <p class="msg system-msg">
-          <span>J.A.R.V.I.S.</span>
-          <div>Interface online. Awaiting connection to the AI backend.</div>
-        </p>
-      </div>
+        <div class="panel-heading">
+          <h2>01 / SYSTEM DIAGNOSTICS</h2>
+          <span class="panel-live">LIVE</span>
+        </div>
 
-      <form id="chatForm" class="input-row">
-        <input
-          id="messageInput"
-          type="text"
-          maxlength="4000"
-          placeholder="Ask J.A.R.V.I.S..."
-          autocomplete="off"
-          required
+        <div class="status-row">
+          <span>AI SYSTEM</span>
+          <b class="status-value" id="aiStatus">
+            READY
+          </b>
+        </div>
+
+        <div class="status-row">
+          <span>NETWORK</span>
+          <b class="status-value" id="networkStatus">
+            LOCAL UI
+          </b>
+        </div>
+
+        <div class="status-row">
+          <span>VOICE</span>
+          <b class="status-value" id="voiceStatus">
+            STANDBY
+          </b>
+        </div>
+
+        <div class="status-row">
+          <span>MEMORY</span>
+          <b class="status-value warning" id="memoryStatus">
+            SESSION ONLY
+          </b>
+        </div>
+
+      </section>
+
+      <!-- COMMUNICATION / CHAT -->
+      <section class="console">
+
+        <div class="console-heading">
+          <span>02 / J.A.R.V.I.S. INTERFACE</span>
+          <span id="clock">--:--:--</span>
+        </div>
+
+        <div class="console-subheading">
+          SECURE COMMUNICATION CHANNEL
+          <span class="hud-indicator"></span>
+        </div>
+
+        <div
+          id="chat"
+          class="chat"
+          role="log"
+          aria-live="polite"
         >
-        <button type="submit" id="sendButton">SEND ▪</button>
-        <button type="button" id="micButton" aria-label="Speak to JARVIS">🎙️</button>
-      </form>
-    </section>
+          <p class="msg system-msg">
+            <span>J.A.R.V.I.S.</span>
+            <div>
+              Interface online. Awaiting connection to the AI backend.
+            </div>
+          </p>
+        </div>
 
+        <div class="voice-dock-label">
+          COMMAND INPUT // VOICE OR TEXT
+        </div>
+
+        <form id="chatForm" class="input-row">
+
+          <input
+            id="messageInput"
+            type="text"
+            maxlength="4000"
+            placeholder="Give me a command, sir..."
+            autocomplete="off"
+            required
+          >
+
+          <button type="submit" id="sendButton">
+            SEND ▪
+          </button>
+
+          <button
+            type="button"
+            id="micButton"
+            aria-label="Speak to JARVIS"
+          >
+            🎙️
+          </button>
+
+        </form>
+
+      </section>
+
+    </div>
+
+    <!-- SYSTEM FOOTER -->
     <p class="footnote" id="connectionNote">
       VISUAL CORE ACTIVE • CONNECTING STATUS PENDING
     </p>
 
-    <footer>J.A.R.V.I.S. PERSONAL PROJECT <span>• MOBILE UI BUILDS</span></footer>
+    <footer>
+      STARK INDUSTRIES
+      <span> / J.A.R.V.I.S. PERSONAL SYSTEM</span>
+    </footer>
+
   </main>
 
+  <!-- EXISTING JAVASCRIPT -->
   <script src="script.js"></script>
 
+  <!-- EXISTING LOGIN AND SESSION LOGIC -->
   <script>
     (() => {
-      const lockScreen = document.getElementById("lockScreen");
-      const app = document.getElementById("jarvisApp");
-      const unlockForm = document.getElementById("unlockForm");
-      const passwordInput = document.getElementById("passwordInput");
-      const unlockButton = document.getElementById("unlockButton");
-      const lockError = document.getElementById("lockError");
-      const lockButton = document.getElementById("lockButton");
+
+      const lockScreen =
+        document.getElementById("lockScreen");
+
+      const app =
+        document.getElementById("jarvisApp");
+
+      const unlockForm =
+        document.getElementById("unlockForm");
+
+      const passwordInput =
+        document.getElementById("passwordInput");
+
+      const unlockButton =
+        document.getElementById("unlockButton");
+
+      const lockError =
+        document.getElementById("lockError");
+
+      const lockButton =
+        document.getElementById("lockButton");
 
       const TOKEN_KEY = "jarvis_login_token";
 
@@ -251,46 +402,71 @@
       }
 
       unlockForm.addEventListener("submit", async (event) => {
+
         event.preventDefault();
+
         lockError.textContent = "";
         unlockButton.disabled = true;
         unlockButton.textContent = "VERIFYING...";
 
         try {
+
           const response = await fetch(
             "https://jarvis-core-js4s.onrender.com/login",
             {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ password: passwordInput.value })
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                password: passwordInput.value
+              })
             }
           );
 
           const data = await response.json().catch(() => ({}));
 
           if (!response.ok || !data.access_token) {
-            throw new Error(data.detail || "Authentication failed.");
+            throw new Error(
+              data.detail || "Authentication failed."
+            );
           }
 
-          localStorage.setItem(TOKEN_KEY, data.access_token);
+          localStorage.setItem(
+            TOKEN_KEY,
+            data.access_token
+          );
+
           showApp();
+
         } catch (error) {
+
           lockError.textContent =
             error.message || "Could not connect. Try again.";
+
         } finally {
+
           unlockButton.disabled = false;
           unlockButton.textContent = "AUTHENTICATE";
           passwordInput.value = "";
+
         }
+
       });
 
       lockButton.addEventListener("click", () => {
+
         try {
           localStorage.removeItem(TOKEN_KEY);
         } catch {}
+
         showLock();
+
       });
+
     })();
   </script>
+
 </body>
-</html>
+                            </html>
+                            
